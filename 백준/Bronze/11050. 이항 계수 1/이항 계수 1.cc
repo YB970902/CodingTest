@@ -17,19 +17,19 @@ int main()
     
     if(N == K)
     {
-        cout << 1 << endl;
+        cout << 1;
         return 0;
     }
     
     if(K == 1)
     {
-        cout << N << endl;
+        cout << N;
         return 0;
     }
     
     if(K == 0)
     {
-        cout << 1 << endl;
+        cout << 1;
         return 0;
     }
     
