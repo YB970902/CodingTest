@@ -25,8 +25,8 @@ int main()
         cin >> oilValues[i];
     }
     
-    int currOilValue = oilValues[0];
-    int result = 0;
+    long long currOilValue = oilValues[0];
+    long long result = 0;
     
     for(int i = 0; i < cityCount - 1; ++i)
     {
