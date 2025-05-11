@@ -1,78 +1,74 @@
 #include <string>
 #include <vector>
-#include <algorithm>
-#include <cmath>
 #include <stdlib.h>
+#include <algorithm>
+#include <memory.h>
 #include <set>
 
 using namespace std;
 
-// 소수를 보관하기 위한 수
-bool arrPrime[10000000];
-// 만들 수 있는 최대 값
-int maxVal;
+// 나올 수 있는 가장 큰 수
+int MaxNumber = 0;
 
-// 모든 경우의 수를 뽑기 위한 벡터. dfs를 사용한다.
-vector<bool> visited;
+// 소수가 들어있는 배열
+vector<bool> PrimeNumbers;
 
-string strNumber;
+// 숫자 카운트를 위한 셋
+set<int> setNumbers;
 
-void dfs(string current, set<int>& result)
+void CalcPrimeNumber()
 {
-    if(!current.empty())
+    for(int i = 2, size = PrimeNumbers.size(); i < size; ++i)
     {
-        result.insert(stoi(current));
+        PrimeNumbers[i] = true;
     }
     
-    for(int i = 0; i < strNumber.size(); ++i)
+    for(int i = 2, size = PrimeNumbers.size(); i < size; ++i)
     {
-        if(visited[i]) continue;
+        if(PrimeNumbers[i])
+        {
+            for(int j = i * 2; j < size; j += i)
+            {
+                PrimeNumbers[j] = false;
+            }
+        }
+    }
+}
+
+void MakeRandomNumbers(vector<bool>& isVisited, const string& numbers, string& currNumber)
+{
+    for(int i = 0, size = numbers.size(); i < size; ++i)
+    {
+        if(isVisited[i]) continue;
         
-        // 중복 숫자 방지
-        if(i > 0 && strNumber[i] == strNumber[i - 1] && !visited[i - 1]) continue;
+        currNumber += numbers[i];
+        isVisited[i] = true;
         
-        visited[i] = true;
-        dfs(current + strNumber[i], result);
-        visited[i] = false;
+        int num = stoi(currNumber);
+        if (PrimeNumbers[num]) setNumbers.insert(num);
+        MakeRandomNumbers(isVisited, numbers, currNumber);
+        
+        currNumber.pop_back();
+        isVisited[i] = false;
     }
 }
 
 int solution(string numbers) {
-    int answer = 0;
-    strNumber = numbers;
-    
-    visited = vector<bool>(numbers.size(), false);
-    
-    // 내림차순 정렬. 가장 큰 값이 된다.
+    // 가장 큰 수를 만들기 위해 내림차순 정렬
     sort(numbers.begin(), numbers.end(), greater<char>());
+    // 가장 큰 수
+    MaxNumber = stoi(numbers);
     
-    maxVal = stoi(numbers);
+    // 소수 만들기.
+    PrimeNumbers = vector<bool>(MaxNumber + 1);
     
-    // 소수를 DP로 구한다.
-    fill(arrPrime, arrPrime + maxVal + 1, true);
-    arrPrime[0] = false;
-    arrPrime[1] = false;
+    // 소수를 계산한다.
+    CalcPrimeNumber();
     
-    for(int i = 2; i <= maxVal; ++i)
-    {
-        if(arrPrime[i])
-        {
-            for(int j = 2; i * j <= maxVal; ++j)
-            {
-                arrPrime[i * j] = false;
-            }
-        }
-    }
+    vector<bool> isVisited = vector<bool>(numbers.size());
+    string strEmpty = "";
+    setNumbers = set<int>();
+    MakeRandomNumbers(isVisited, numbers, strEmpty);
     
-    // 모든 경우의 수를 계산하기 위한 벡터
-    
-    set<int> dfsResult = set<int>();
-    dfs("", dfsResult);
-    
-    for(int num : dfsResult)
-    {
-        if(arrPrime[num]) ++answer;
-    }
-    
-    return answer;
+    return setNumbers.size();
 }
