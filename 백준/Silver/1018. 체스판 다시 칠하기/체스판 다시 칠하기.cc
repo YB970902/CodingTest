@@ -1,54 +1,53 @@
 #include <iostream>
-#include <vector>
-#include <string>
-#include <memory.h>
+#include <cstring>
 
 using namespace std;
 
-int N, M; // 행, 열
-char board[50][50]; // 체스판 데이터
+int N, M;
+
+char Board[50][50];
 
 int main()
 {
     cin >> N >> M;
-    
-    int minChangedCount = 50 * 50;
-    
-    for(int i = 0; i < N; ++i)
+
+    for (int row = 0; row < N; ++row)
     {
-        string str;
-        cin >> str;
-        for(int j = 0; j < M; ++j)
+        string temp;
+        cin >> temp;
+
+        for (int col = 0; col < M; ++col)
         {
-            board[i][j] = str[j];
+            Board[row][col] = temp[col];
         }
     }
-    
-    for(int row = 0; row <= N - 8; ++row)
+
+    // 결과
+    int result = 65;
+
+    for (int row = 0; row <= N - 8; ++row)
     {
-        for(int col = 0; col <= M - 8; ++col)
+        for (int col = 0; col <= M - 8; ++col)
         {
-            int blackFirstCount = 0;
-            int whiteFirstCount = 0;
-            
-            for(int i = 0; i < 8; ++i)
+            int blackFirstPaintCount = 0;
+            int whiteFirstPaintCount = 0;
+            for (int i = 0; i < 8; ++i)
             {
-                for(int j = 0; j < 8; ++j)
+                for (int j = 0; j < 8; ++j)
                 {
-                    char current = board[row + j][col + i];
-                    char blackFirst = ((i + j) % 2 == 0) ? 'B' : 'W';
-                    char whiteFirst = ((i + j) % 2 == 0) ? 'W' : 'B';
-                    
-                    if(current != blackFirst) ++blackFirstCount;
-                    if(current != whiteFirst) ++whiteFirstCount;
+                    char ch = Board[row + i][col + j];
+                    char chBlackFirst = (i + j) % 2 == 0 ? 'B' : 'W';
+
+                    if (ch != chBlackFirst) ++blackFirstPaintCount;
+                    else ++whiteFirstPaintCount;
                 }
             }
-            
-            minChangedCount = min(minChangedCount, min(whiteFirstCount, blackFirstCount));
+
+            result = min(result, min(blackFirstPaintCount, whiteFirstPaintCount));
         }
     }
-    
-    cout << minChangedCount;
-    
+
+    cout << result;
+
     return 0;
 }
