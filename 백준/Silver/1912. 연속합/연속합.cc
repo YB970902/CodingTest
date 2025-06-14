@@ -1,30 +1,26 @@
 #include <iostream>
+#include <cmath>
 
 using namespace std;
 
-// 수의 길이
+// 수열의 길이
 int N;
 
 int main()
 {
     cin >> N;
 
-    int currSum = 0;
-    int maxSum = 0;
-
-    --N;
-    cin >> currSum;
-    maxSum = currSum;
-    
+    int currVal = 0;
+    int pSum = 0;
+    int maxVal = -1e9;
     for (int i = 0; i < N; ++i)
     {
-        int temp;
-        cin >> temp;
-        currSum = max(temp, currSum + temp);
-        maxSum = max(maxSum, currSum);
+        cin >> currVal;
+        pSum = max(currVal, pSum + currVal);
+        maxVal = max(maxVal, pSum);
     }
 
-    cout << maxSum;
+    cout << maxVal;
 
     return 0;
 }
