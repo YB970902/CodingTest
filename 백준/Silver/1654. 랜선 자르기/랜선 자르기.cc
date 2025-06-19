@@ -38,10 +38,10 @@ int main()
     // 자를 수 있는 가장 작은 길이
     long long low = 1;
 
-    while (low < high - 1)
+    while (low < high)
     {
         // 중심값
-        long long mid = (low + high) / 2;
+        long long mid = (low + high) / 2 + 1;
 
         if (isPossible(mid))
         {
@@ -53,8 +53,7 @@ int main()
         }
     }
 
-    if (isPossible(low + 1)) cout << low + 1;
-    else cout << low;
+    cout << low;
 
     return 0;
 }
