@@ -8,10 +8,10 @@ using namespace std;
 int N;
 
 // 가장 낮은 값(알칼리)과 가장 높은 값(산성)
-long long low = -1e18, high = 1e18;
+int low = -1e9, high = 1e9;
 
 // 가장 높은값과 낮은값의 차이
-long long offset = 1e18;
+int offset = 2e9 + 1;
 
 // 용액이 들어있는 배열
 vector<int> vec;
@@ -34,13 +34,13 @@ int main()
     int right = N - 1;
 
     // 왼쪽과 오른쪽 변수의 차이
-    long long currOffset = 1e18;
+    int currOffset = 1e9;
 
     // 모든 리스트를 검색했다면 멈춘다.
     while (left < right)
     {
         currOffset = vec[left] + vec[right];
-        long long absOffset = abs(currOffset);
+        int absOffset = abs(currOffset);
 
         if (absOffset < offset)
         {
