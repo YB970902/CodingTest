@@ -1,34 +1,56 @@
-#include <bits/stdc++.h>
+
+#include <iostream>
+#include <bitset>
+#include <vector>
+#include <algorithm>
+
 using namespace std;
 
-int main(){
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
+int N;
+string T;
 
-    int N;
-    string S;
-    cin >> N >> S;
+vector<string> vec;
 
-    vector<pair<int,string>> V;
-    for(int i=0;i<(1<<N);i++){
-        string t = bitset<20>(i).to_string().substr(20-N);
-        string r = t;
-        reverse(r.begin(), r.end());
-        int cnt = count(r.begin(), r.end(), '1');
-        V.push_back({cnt, r});
+bool comp(const string& lhs, const string& rhs)
+{
+    int lhsCount = 0;
+    int rhsCount = 0;
+
+    for (int i = 0; i < N; ++i)
+    {
+        lhsCount += lhs[i] == '1';
+        rhsCount += rhs[i] == '1';
     }
 
-    sort(V.begin(), V.end(), [&](auto &a, auto &b){
-        if(a.first != b.first) return a.first < b.first;
-        return a.second < b.second; // reverse 기준 오름차순
-    });
+    if (lhsCount != rhsCount) return lhsCount < rhsCount;
+    return lhs < rhs;
+}
 
-    string RS = S;
-    reverse(RS.begin(), RS.end());
-    for(int i=0;i<V.size();i++){
-        if(V[i].second == RS){
-            cout << i << "\n";
-            return 0;
+int main()
+{
+    cin >> N >> T;
+
+    reverse(T.begin(), T.end());
+
+    int max = 1 << N;
+    for (int i = 0; i < max; ++i)
+    {
+        string str = bitset<11>(i).to_string().substr(11 - N);
+        reverse(str.begin(), str.end());
+        // 문자열, 크기
+        vec.push_back(str);
+    }
+
+    sort(vec.begin(), vec.end(), comp);
+
+    for (int i = 0; i < max; ++i)
+    {
+        if (T == vec[i])
+        {
+            cout << i;
+            break;
         }
     }
+
+    return 0;
 }
